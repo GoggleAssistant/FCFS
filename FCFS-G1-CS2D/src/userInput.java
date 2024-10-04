@@ -1,19 +1,13 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.Font;
-import javax.swing.JTextField;
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class userInput {
 
     // Declare instance variables for the panels
     private JPanel panel1;
+    private JPanel panel2; // Now an instance variable
     private JPanel p1Panel, p2Panel, p3Panel, p4Panel, p5Panel, p6Panel;
 
     // Add these instance variables
@@ -42,7 +36,7 @@ public class userInput {
 
         // Initialize the upper panels
         panel1 = new JPanel();
-        JPanel panel2 = new JPanel();
+        panel2 = new JPanel();
         panel1.setBackground(new Color(0xD3, 0xD2, 0xDB)); 
         panel2.setBackground(Color.BLACK);
 
@@ -51,6 +45,9 @@ public class userInput {
 
         // Call the processNum() method to add GUI elements to panel1
         processNum();
+
+        // Call the new method to set up panel2
+        setupPanel2();
 
         // Initialize the lower panels as instance variables
         p1Panel = new JPanel();
@@ -94,6 +91,38 @@ public class userInput {
             notAvailableLabels[i].setBounds(20, 50, 200, 30);
             notAvailableLabels[i].setVisible(false);
         }
+    }
+
+    // New method to set up panel2
+    private void setupPanel2() {
+        panel2.setLayout(null); // Use null layout for absolute positioning
+
+        // Add "First Come First Serve" label
+        JLabel fcfsLabel = new JLabel("First Come First Serve");
+        fcfsLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        fcfsLabel.setForeground(Color.WHITE);
+        fcfsLabel.setBounds(20, 80, 300, 30); // Moved down to align with panel1 elements
+
+        // Add "Made by CS2D - Group 1" label
+        JLabel groupLabel = new JLabel("Made by CS2D - Group 1");
+        groupLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        groupLabel.setForeground(Color.WHITE);
+        groupLabel.setBounds(20, 110, 300, 20); // Positioned below fcfsLabel
+
+        // Add "Generate" button
+        JButton generateButton = new JButton("Generate");
+        generateButton.setFont(new Font("Arial", Font.BOLD, 18));
+        generateButton.setBounds(20, 150, 150, 40);
+        generateButton.setBackground(Color.WHITE);
+        generateButton.setFocusPainted(false);
+
+        // Add ActionListener to the generate button
+        generateButton.addActionListener(e -> generateFCFS());
+
+        // Add components to panel2
+        panel2.add(fcfsLabel);
+        panel2.add(groupLabel);
+        panel2.add(generateButton);
     }
 
     // This method will process and add elements to the panels (panel1 and panel2 in the upper part)
@@ -188,161 +217,81 @@ public class userInput {
 
     // This method will handle the GUI elements for p1Panel to p6Panel
     private void processPanel(JPanel p1Panel, JPanel p2Panel, JPanel p3Panel, JPanel p4Panel, JPanel p5Panel, JPanel p6Panel) {
+        JPanel[] panels = {p1Panel, p2Panel, p3Panel, p4Panel, p5Panel, p6Panel};
         
-        // Set null layout for absolute positioning
-        p1Panel.setLayout(null);
-        p2Panel.setLayout(null);
-        p3Panel.setLayout(null);
-        p4Panel.setLayout(null);
-        p5Panel.setLayout(null);
-        p6Panel.setLayout(null);
+        for (int i = 0; i < panels.length; i++) {
+            JPanel panel = panels[i];
+            panel.setLayout(null);
 
-        // Adding elements to p1Panel
-        JLabel p1Label = new JLabel("Process 1");
-        p1Label.setFont(new Font("Arial", Font.BOLD, 20));
-        p1Label.setBounds(20, 50, 200, 30); // x, y, width, height
-        p1Panel.add(p1Label);
-        
-        // Arrival Time Label and Text Field
-        JLabel p1ArriveLabel = new JLabel("Arrival Time");
-        p1ArriveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p1ArriveLabel.setBounds(20, 90, 200, 30); // x, y, width, height
-        p1Panel.add(p1ArriveLabel);
+            JLabel processLabel = new JLabel("Process " + (i + 1));
+            processLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            processLabel.setBounds(20, 50, 200, 30);
+            panel.add(processLabel);
 
-        JTextField p1ArriveTextField = new JTextField();
-        p1ArriveTextField.setBounds(20, 120, 100, 30); // same x, below label
-        p1Panel.add(p1ArriveTextField);
+            JLabel arriveLabel = new JLabel("Arrival Time");
+            arriveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+            arriveLabel.setBounds(20, 90, 200, 30);
+            panel.add(arriveLabel);
 
-        // Burst Time Label and Text Field
-        JLabel p1BurstLabel = new JLabel("Burst Time");
-        p1BurstLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p1BurstLabel.setBounds(20, 160, 200, 30);
-        p1Panel.add(p1BurstLabel);
+            JTextField arriveTextField = new JTextField("0"); // Set default value to "0"
+            arriveTextField.setBounds(20, 120, 100, 30);
+            panel.add(arriveTextField);
 
-        JTextField p1BurstTextField = new JTextField();
-        p1BurstTextField.setBounds(20, 190, 100, 30); // same x, below label
-        p1Panel.add(p1BurstTextField);
+            JLabel burstLabel = new JLabel("Burst Time");
+            burstLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+            burstLabel.setBounds(20, 160, 200, 30);
+            panel.add(burstLabel);
 
-        // Repeat similar structure for other panels
-        // Adding elements to p2Panel
-        JLabel p2Label = new JLabel("Process 2");
-        p2Label.setFont(new Font("Arial", Font.BOLD, 20));
-        p2Label.setBounds(20, 50, 200, 30);
-        p2Panel.add(p2Label);
-        
-        JLabel p2ArriveLabel = new JLabel("Arrival Time");
-        p2ArriveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p2ArriveLabel.setBounds(20, 90, 200, 30);
-        p2Panel.add(p2ArriveLabel);
-
-        JTextField p2ArriveTextField = new JTextField();
-        p2ArriveTextField.setBounds(20, 120, 100, 30); // same x, below label
-        p2Panel.add(p2ArriveTextField);
-
-        JLabel p2BurstLabel = new JLabel("Burst Time");
-        p2BurstLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p2BurstLabel.setBounds(20, 160, 200, 30);
-        p2Panel.add(p2BurstLabel);
-
-        JTextField p2BurstTextField = new JTextField();
-        p2BurstTextField.setBounds(20, 190, 100, 30); // same x, below label
-        p2Panel.add(p2BurstTextField);
-
-        // Adding elements to p3Panel
-        JLabel p3Label = new JLabel("Process 3");
-        p3Label.setFont(new Font("Arial", Font.BOLD, 20));
-        p3Label.setBounds(20, 50, 200, 30);
-        p3Panel.add(p3Label);
-        
-        JLabel p3ArriveLabel = new JLabel("Arrival Time");
-        p3ArriveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p3ArriveLabel.setBounds(20, 90, 200, 30);
-        p3Panel.add(p3ArriveLabel);
-
-        JTextField p3ArriveTextField = new JTextField();
-        p3ArriveTextField.setBounds(20, 120, 100, 30); // same x, below label
-        p3Panel.add(p3ArriveTextField);
-
-        JLabel p3BurstLabel = new JLabel("Burst Time");
-        p3BurstLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p3BurstLabel.setBounds(20, 160, 200, 30);
-        p3Panel.add(p3BurstLabel);
-
-        JTextField p3BurstTextField = new JTextField();
-        p3BurstTextField.setBounds(20, 190, 100, 30); // same x, below label
-        p3Panel.add(p3BurstTextField);
-
-        // Adding elements to p4Panel
-        JLabel p4Label = new JLabel("Process 4");
-        p4Label.setFont(new Font("Arial", Font.BOLD, 20));
-        p4Label.setBounds(20, 50, 200, 30);
-        p4Panel.add(p4Label);
-        
-        JLabel p4ArriveLabel = new JLabel("Arrival Time");
-        p4ArriveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p4ArriveLabel.setBounds(20, 90, 200, 30);
-        p4Panel.add(p4ArriveLabel);
-
-        JTextField p4ArriveTextField = new JTextField();
-        p4ArriveTextField.setBounds(20, 120, 100, 30); // same x, below label
-        p4Panel.add(p4ArriveTextField);
-
-        JLabel p4BurstLabel = new JLabel("Burst Time");
-        p4BurstLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p4BurstLabel.setBounds(20, 160, 200, 30);
-        p4Panel.add(p4BurstLabel);
-
-        JTextField p4BurstTextField = new JTextField();
-        p4BurstTextField.setBounds(20, 190, 100, 30); // same x, below label
-        p4Panel.add(p4BurstTextField);
-
-        // Adding elements to p5Panel
-        JLabel p5Label = new JLabel("Process 5");
-        p5Label.setFont(new Font("Arial", Font.BOLD, 20));
-        p5Label.setBounds(20, 50, 200, 30);
-        p5Panel.add(p5Label);
-        
-        JLabel p5ArriveLabel = new JLabel("Arrival Time");
-        p5ArriveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p5ArriveLabel.setBounds(20, 90, 200, 30);
-        p5Panel.add(p5ArriveLabel);
-
-        JTextField p5ArriveTextField = new JTextField();
-        p5ArriveTextField.setBounds(20, 120, 100, 30); // same x, below label
-        p5Panel.add(p5ArriveTextField);
-
-        JLabel p5BurstLabel = new JLabel("Burst Time");
-        p5BurstLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p5BurstLabel.setBounds(20, 160, 200, 30);
-        p5Panel.add(p5BurstLabel);
-
-        JTextField p5BurstTextField = new JTextField();
-        p5BurstTextField.setBounds(20, 190, 100, 30); // same x, below label
-        p5Panel.add(p5BurstTextField);
-
-        // Adding elements to p6Panel
-        JLabel p6Label = new JLabel("Process 6");
-        p6Label.setFont(new Font("Arial", Font.BOLD, 20));
-        p6Label.setBounds(20, 50, 200, 30);
-        p6Panel.add(p6Label);
-        
-        JLabel p6ArriveLabel = new JLabel("Arrival Time");
-        p6ArriveLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p6ArriveLabel.setBounds(20, 90, 200, 30);
-        p6Panel.add(p6ArriveLabel);
-
-        JTextField p6ArriveTextField = new JTextField();
-        p6ArriveTextField.setBounds(20, 120, 100, 30); // same x, below label
-        p6Panel.add(p6ArriveTextField);
-
-        JLabel p6BurstLabel = new JLabel("Burst Time");
-        p6BurstLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-        p6BurstLabel.setBounds(20, 160, 200, 30);
-        p6Panel.add(p6BurstLabel);
-
-        JTextField p6BurstTextField = new JTextField();
-        p6BurstTextField.setBounds(20, 190, 100, 30); // same x, below label
-        p6Panel.add(p6BurstTextField); 
+            JTextField burstTextField = new JTextField("1"); // Set default value to "1"
+            burstTextField.setBounds(20, 190, 100, 30);
+            panel.add(burstTextField);
+        }
     }
 
+    // New method for FCFS generation
+    private void generateFCFS() {
+        // Check if the number of processes is selected
+        if (visiblePanels == 0) {
+            JOptionPane.showMessageDialog(null, "Please select the number of processes first.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Array to store process details
+        int[][] processes = new int[visiblePanels][2]; // [arrival time, burst time]
+
+        // Collect data from visible panels
+        JPanel[] panels = {p1Panel, p2Panel, p3Panel, p4Panel, p5Panel, p6Panel};
+        for (int i = 0; i < visiblePanels; i++) {
+            JTextField arrivalField = (JTextField) panels[i].getComponent(2); // Assuming arrival time field is the 3rd component
+            JTextField burstField = (JTextField) panels[i].getComponent(4);   // Assuming burst time field is the 5th component
+
+            try {
+                processes[i][0] = Integer.parseInt(arrivalField.getText());
+                processes[i][1] = Integer.parseInt(burstField.getText());
+
+                if (processes[i][1] <= 0) {
+                    throw new NumberFormatException("Burst time must be positive");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid input for Process " + (i + 1) + ". Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // TODO: Implement FCFS algorithm here
+        // For now, we'll just print the collected data
+        StringBuilder result = new StringBuilder("FCFS Data:\n");
+        for (int i = 0; i < visiblePanels; i++) {
+            result.append("Process ").append(i + 1)
+                  .append(": Arrival Time = ").append(processes[i][0])
+                  .append(", Burst Time = ").append(processes[i][1])
+                  .append("\n");
+        }
+
+        JOptionPane.showMessageDialog(null, result.toString(), "FCFS Result", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new userInput());
+    }
 }
